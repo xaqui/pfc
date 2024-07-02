@@ -1,0 +1,27 @@
+h2 {
+  font-size: 3em;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+@media (max-width: 700px) {
+  .summary-box-size {
+    width: 100%;
+    min-width: 300px;
+  }
+}
+
+@media (min-width: 701px) {
+  .summary-box-size {
+    width: 700px;
+  }
+}
+.summary-box {
+  padding: 2rem;
+  height: fit-content;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: $highlight;
+  max-width: 900px;
+  box-shadow: rgba(50, 50, 93, 0.01) 0px 30px 60px -12px,
+    rgba(0, 0, 0, 0.1) 0px 18px 36px -18px;
+}

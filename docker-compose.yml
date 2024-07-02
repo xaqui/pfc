@@ -1,0 +1,50 @@
+
+
+services:
+  db:
+    image: mysql:latest
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD:  root
+      MYSQL_DATABASE: excursiondb
+    ports:
+      - "6666:3306"
+    networks:
+      - backend-network
+    volumes:
+      - ./pfc-back/scripts/db:/docker-entrypoint-initdb.d
+      - ./pfc-back/sql:/tmp/sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./pfc-back
+    container_name: excursion-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/excursiondb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-network
+
+  frontend:
+    build: ./pfc-front
+    container_name: excursion-frontend
+    ports:
+      - "9999:80"
+    networks:
+      - frontend-network
+
+networks:
+  backend-network:
+    driver: bridge
+  frontend-network:
+    driver: bridge
